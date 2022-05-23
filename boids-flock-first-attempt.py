@@ -16,6 +16,9 @@ width,height = 800,800
 screen = pygame.display.set_mode((width,height))
 screen.fill(background_colour)
 
+chunk_size = 50
+#chunks = [[[] for i in range(ceil(width/chunk_size))] for j in range(ceil(width/chunk_size))]
+
 agents = []
 
 
@@ -27,6 +30,7 @@ class Agent:
         self.look = 50
         self.size = 20
         self.colour = (255,255,255)
+        self.chunk = [0,0]
     
     def update(self):
         """
@@ -34,7 +38,10 @@ class Agent:
             self.angle += .1
         if keys[pygame.K_LEFT]:
             self.angle -= .1"""
-        
+
+        self.chunk = [floor(self.pos[0]/chunk_size),
+                      floor(self.pos[1]/chunk_size)]
+
         left_view_pos = (cos(20+self.angle)*(self.look+3)+self.pos[0], sin(20+self.angle)*(self.look+3)+self.pos[1])
         right_view_pos = (cos(-20+self.angle)*(self.look+3)+self.pos[0], sin(-20+self.angle)*(self.look+3)+self.pos[1])
         left_view = 0
@@ -50,8 +57,8 @@ class Agent:
             except:
                 pass
                 
-        #pygame.draw.circle(screen,(255,0,0),left_view_pos,self.look,1)
-        #pygame.draw.circle(screen,(0,0,255),right_view_pos,self.look,1)
+        #pygame.draw.circle(screen,(255,0,0),[round(left_view_pos[0]),round(left_view_pos[1])],self.look,1)
+        #pygame.draw.circle(screen,(0,0,255),[round(right_view_pos[0]),round(right_view_pos[1])],self.look,1)
 
         self.pos = (self.pos[0]+cos(self.angle)*self.speed,self.pos[1]+sin(self.angle)*self.speed)
 
@@ -65,6 +72,7 @@ class Agent:
 
 running = True
 while running:
+    print(clock)
     clock.tick(fps_limit)
     screen.fill(background_colour)
     keys = pygame.key.get_pressed()
@@ -74,7 +82,7 @@ while running:
     
     if rand(0,1) == 0:
         agents.append(Agent((rand(25,height-25),-25),radians(rand(80,100))))
-    
+
     for agent in agents:
         agent.update()
         if agent.pos[0] < -25 or agent.pos[1] < -25 or agent.pos[0] > width+25 or agent.pos[1] > height+25:

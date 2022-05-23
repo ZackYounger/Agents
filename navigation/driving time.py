@@ -22,7 +22,7 @@ sprite.set_colorkey((246, 246, 246))
 mask = pygame.mask.from_surface(sprite)
 car_width, car_height = 153, 330
 car_scale_factor = 0.5
-sprite = pygame.transform.scale(sprite, (car_scale_factor*car_width, car_scale_factor*car_height))
+sprite = pygame.transform.scale(sprite, (round(car_scale_factor*car_width), round(car_scale_factor*car_height)))
 
 class Car:
     def __init__(self, colour=(255, 255, 255)):
@@ -80,7 +80,7 @@ class Car:
         self.vel = (sin(radians(self.angle))*self.speed, cos(radians(self.angle))*self.speed)
         #self.vel = (self.vel[0] * self.drag, self.vel[1] * self.drag)
 
-        self.pos = (self.pos[0] + self.vel[0], self.pos[1] + self.vel[1])
+        self.pos = (round(self.pos[0] + self.vel[0]), round(self.pos[1] + self.vel[1]))
 
         self.display_sprite = pygame.transform.rotozoom(self.original_sprite, self.angle, 1)
 
